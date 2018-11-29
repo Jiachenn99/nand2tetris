@@ -39,20 +39,17 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Implement the CPU based on its following functionalities
-    // Instruction decode
-   
-    Not(in= instruction[15], out= aInst);
-    Not(in = aInst, out = cInst);
+    Not(in= instruction[15], out= aInst); 	//A instruction is the negation of a C instruction
+    Not(in = aInst, out = cInst); 	//Using a variable for C instruction to increase readability 
 
     // A register and input mux
     And(a= cInst, b= instruction[5], out= ALUtoA);
     Mux16(a= instruction, b= aluOut, sel= ALUtoA, out= regAin);
-
     Or(a= aInst, b= ALUtoA, out= regAload);
-    ARegister(in= regAin, load= regAload, out= outA);
+	
+    ARegister(in= regAin, load= regAload, out= outA, out[0..14] = addressM); 
 
-    Mux16(a= outA, b= inM, sel= instruction[12], out= AMout);
+    Mux16(a= outA, b= inM, sel= instruction[12], out= AMout); 
 
     // D register
     And(a = cInst, b = instruction[4], out = loadD);
@@ -61,20 +58,19 @@ CHIP CPU {
     // ALU and input mux
     ALU(x= outD, y= AMout, zx = instruction[11], nx= instruction[10], 
         zy= instruction[9], ny= instruction[8], f= instruction[7], 
-        no=instruction[6], out= aluOut, zr= zrOut, ng= ngOut);
+        no=instruction[6], out= aluOut, out = outM, zr= zrOut, ng= ngOut);
 
     //write to memory
-    Or16(a=false, b=outA, out[0..14]=addressM);
-    Or16(a=false, b=aluOut, out=outM);
     And(a= cInst, b= instruction[3], out= writeM);
 
     // PC with jump test
     //Program Counter
     And(a = zrOut , b = instruction[1], out= JEQ); //Equal
+	
     And(a= ngOut, b= instruction[2], out= JLT); //Less than
-    Or(a= zrOut, b= ngOut, out= zrOrng);
+    Or(a= zrOut, b= ngOut, out= zrOrng);	
     Not(in= zrOrng, out= positive);
-    And(a= positive, b= instruction[0], out= JGT);
+    And(a= positive, b= instruction[0], out= JGT); //Greater than
 
     //Combining both inputs
     Or(a= JEQ, b= JLT, out= JLE); //Less than or equal to

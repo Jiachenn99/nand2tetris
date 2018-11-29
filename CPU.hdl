@@ -82,4 +82,6 @@ CHIP CPU {
     And(a= jmp, b= cInst, out= toPC);
     Not(in= toPC, out= PCinc);
     PC(in= outA, load= toPC,  inc= PCinc, reset= reset, out[0..14]=pc);
+	
+	//Testing
 }

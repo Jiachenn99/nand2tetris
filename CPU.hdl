@@ -46,7 +46,7 @@ CHIP CPU {
     Not(in = aInst, out = cInst);
 
     // A register and input mux
-    Anod(a= cInst, b= instruction[5], out= ALUtoA);
+    And(a= cInst, b= instruction[5], out= ALUtoA);
     Mux16(a= instruction, b= aluOut, sel= ALUtoA, out= regAin);
 
     Or(a= aInst, b= ALUtoA, out= regAload);

@@ -22,13 +22,13 @@ CHIP Computer {
 
     // Supply the 3 parts of the Computer Chip as follows:
 
-
-    // CPU
-    CPU(inM= memOut , instruction= ROMout, reset= reset, outM= o1, writeM= w1, addressM= a1, pc= pcOut);
+   // CPU
+    CPU(inM= memOut , instruction= ROMout, reset= reset, outM= o1, writeM= w1, addressM= a1, pc= pcOut);  //fetch and execute instructions
 
     // RAM
     Memory(in= o1, load= w1, address= a1, out= memOut); //store temporary data from CPU
 
-    // ROM
-    ROM32K(address= pcOut, out= ROMout); //pc to choose which line of Address from ROM to execute, whether to jump or execute next instruction
+    // ROM	
+    //pc choose which line of Address from ROM to execute, whether to jump or execute next instruction
+    ROM32K(address= pcOut, out= ROMout);  //ROM holds instructions
 }

@@ -28,16 +28,15 @@ CHIP Memory {
 
     PARTS:
    // Put your code here:
-	
     DMux4Way(in= load, sel= address[13..14], a= data1, b= data2, c= screen, d= keyboard); //Select which component to access
 	
-    Or(a= data1, b= data2, out= loadram); //If there is data, load the RAM.
-    RAM16K(in= in, load= loadram, address= address[0..13], out= ramout); //Select which part of the RAM to access
+    Or(a= data1, b= data2, out= loadram); //combine first 2 outputs of DMux together to select RAM
+    RAM16K(in= in, load= loadram, address= address[0..13], out= ramout); //Address[0..13] to select which part of the RAM to access
 	
-    Screen(in= in, load= screen, address= address[0..12], out= screenout);
+    Screen(in= in, load= screen, address= address[0..12], out= screenout); //Address[0..12] to select which part of the screen to print
 	
-    Keyboard(out= keyboardout);
+    Keyboard(out= keyboardout); //no input to keyboard, Memory outputs the ASCII of keys pressed on keyboard
 	
-    Mux4Way16(a= ramout, b= ramout, c= screenout, d= keyboardout, sel= address[13..14], out = out);
+    Mux4Way16(a= ramout, b= ramout, c= screenout, d= keyboardout, sel= address[13..14], out = out); //Select which component to output
 
 }
